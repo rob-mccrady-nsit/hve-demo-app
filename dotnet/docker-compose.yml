@@ -1,0 +1,12 @@
+services:
+  stockroom:
+    build: .
+    ports:
+      - "${APP_PORT:-5080}:8080"
+    environment:
+      DATABASE: /data/inventory.db
+    volumes:
+      - stockroom-data:/data
+
+volumes:
+  stockroom-data:

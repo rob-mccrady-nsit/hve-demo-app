@@ -1,0 +1,48 @@
+@page "/reports"
+@model Stockroom.Pages.Reports.IndexModel
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<section class="page-heading">
+    <div><p class="eyebrow">Performance <span>/</span> All recorded sales</p><h1>Reports</h1><p class="page-intro">Revenue grouped by product and category.</p></div>
+</section>
+
+<section class="report-grid">
+    <article class="surface-panel">
+        <div class="section-heading"><div><p class="eyebrow">Top sellers</p><h2>Products by revenue</h2></div></div>
+        @if (Model.TopProducts.Count == 0)
+        {
+            <div class="empty-state"><span class="empty-mark">↗</span><p>Reports will populate after sales are recorded.</p></div>
+        }
+        else
+        {
+            <div class="table-wrap"><table>
+                <thead><tr><th>Product</th><th>Units sold</th><th>Revenue</th></tr></thead>
+                <tbody>
+                @foreach (var product in Model.TopProducts)
+                {
+                    <tr><td class="table-primary">@product.Name</td><td>@product.TotalSold</td><td class="money money-strong">@product.TotalRevenue.ToString("C", CultureInfo.GetCultureInfo("en-US"))</td></tr>
+                }
+                </tbody>
+            </table></div>
+        }
+    </article>
+
+    <article class="surface-panel">
+        <div class="section-heading"><div><p class="eyebrow">Category mix</p><h2>Revenue by category</h2></div></div>
+        @if (Model.RevenueByCategory.Count == 0)
+        {
+            <div class="empty-state"><span class="empty-mark">%</span><p>No category revenue to show yet.</p></div>
+        }
+        else
+        {
+            <div class="category-list">
+            @foreach (var category in Model.RevenueByCategory)
+            {
+                <div class="category-row"><span>@category.Category</span><strong>@category.TotalRevenue.ToString("C", CultureInfo.GetCultureInfo("en-US"))</strong></div>
+            }
+            </div>
+        }
+    </article>
+</section>

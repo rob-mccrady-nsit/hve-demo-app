@@ -10,6 +10,8 @@ portfolio, this is a working, interactive application with a real backend -
 built to demonstrate CRUD operations, server-side logic, and functional
 web development, not just data analysis.
 
+**Repository note:** Because I'm kindof a punk, I told copilot to rewrite the python app as a C#/ASP.Net solution.  That's in the /dotnet folder.
+
 ## Features
 - **Dashboard:** live overview of total products, total stock value, total
   revenue, low-stock alerts, and recent sales

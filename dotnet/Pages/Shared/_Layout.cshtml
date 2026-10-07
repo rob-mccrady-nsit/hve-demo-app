@@ -1,0 +1,54 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#182936">
+    <title>@ViewData["Title"] | Stockroom</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" id="primary-navigation">
+            <a class="brand" href="/" aria-label="Stockroom dashboard">
+                <span class="brand-mark">S</span>
+                <span><strong>Stockroom</strong><small>Inventory &amp; sales</small></span>
+            </a>
+            <div class="nav-caption">Workspace</div>
+            <nav class="nav-list" aria-label="Main navigation">
+                <a class="@(Context.Request.Path == "/" ? "nav-link active" : "nav-link")" href="/">Dashboard</a>
+                <a class="@(Context.Request.Path.StartsWithSegments("/products") ? "nav-link active" : "nav-link")" href="/products">Products</a>
+                <a class="@(Context.Request.Path.StartsWithSegments("/sales/record") ? "nav-link active" : "nav-link")" href="/sales/record">Record sale</a>
+                <a class="@(Context.Request.Path.StartsWithSegments("/sales") && Context.Request.Path.StartsWithSegments("/sales/record") == false ? "nav-link active" : "nav-link")" href="/sales">Sales history</a>
+                <a class="@(Context.Request.Path.StartsWithSegments("/reports") ? "nav-link active" : "nav-link")" href="/reports">Reports</a>
+            </nav>
+            <div class="sidebar-foot"><span class="status-dot"></span> Local inventory</div>
+        </aside>
+
+        <div class="main-column">
+            <header class="topbar">
+                <button class="menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false" aria-label="Open navigation" data-menu-toggle>
+                    <span></span><span></span><span></span>
+                </button>
+                <span class="topbar-label">Stockroom <span>/</span> Small business POS</span>
+                <a class="topbar-action" href="/sales/record">New sale <span aria-hidden="true">+</span></a>
+            </header>
+            <main class="main-content" id="main-content">
+                @if (TempData["FlashMessage"] is string flashMessage)
+                {
+                    var flashKind = TempData["FlashKind"] as string ?? "success";
+                    <div class="notice notice-@flashKind" role="status">@flashMessage</div>
+                }
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <div class="nav-scrim" data-menu-scrim></div>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

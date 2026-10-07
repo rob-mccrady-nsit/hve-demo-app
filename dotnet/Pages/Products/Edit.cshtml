@@ -1,0 +1,26 @@
+@page "/products/edit/{id:int}"
+@model Stockroom.Pages.Products.EditModel
+@{
+    ViewData["Title"] = "Edit product";
+}
+
+<section class="page-heading">
+    <div><p class="eyebrow"><a href="/products">Products</a> <span>/</span> Edit item</p><h1>Edit product</h1><p class="page-intro">Update the catalog and inventory details.</p></div>
+</section>
+
+<section class="surface-panel form-panel">
+    <form method="post" class="product-form">
+        <input asp-for="Input.Sku" type="hidden">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <div class="form-grid">
+            <div class="field field-wide"><label asp-for="Input.Name">Product name</label><input asp-for="Input.Name"><span asp-validation-for="Input.Name"></span></div>
+            <div class="field"><label>SKU</label><div class="read-only-value mono">@Model.Product?.Sku</div></div>
+            <div class="field"><label asp-for="Input.Category">Category</label><input asp-for="Input.Category"><span asp-validation-for="Input.Category"></span></div>
+            <div class="field"><label asp-for="Input.QuantityInStock">Quantity in stock</label><input asp-for="Input.QuantityInStock" min="0"><span asp-validation-for="Input.QuantityInStock"></span></div>
+            <div class="field"><label asp-for="Input.ReorderLevel">Reorder level</label><input asp-for="Input.ReorderLevel" min="0"><span asp-validation-for="Input.ReorderLevel"></span></div>
+            <div class="field"><label asp-for="Input.UnitPrice">Unit price (USD)</label><input asp-for="Input.UnitPrice" type="number" min="0" step="0.01"><span asp-validation-for="Input.UnitPrice"></span></div>
+            <div class="field"><label asp-for="Input.Supplier">Supplier <span class="optional">Optional</span></label><input asp-for="Input.Supplier"><span asp-validation-for="Input.Supplier"></span></div>
+        </div>
+        <div class="form-actions"><button class="button button-primary" type="submit">Save changes</button><a class="button button-secondary" href="/products">Cancel</a></div>
+    </form>
+</section>

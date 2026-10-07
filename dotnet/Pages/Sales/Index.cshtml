@@ -1,0 +1,38 @@
+@page "/sales"
+@model Stockroom.Pages.Sales.IndexModel
+@{
+    ViewData["Title"] = "Sales history";
+}
+
+<section class="page-heading">
+    <div><p class="eyebrow">Transactions <span>/</span> @Model.Sales.Count entries</p><h1>Sales history</h1><p class="page-intro">A record of every sale entered in Stockroom.</p></div>
+    <a class="button button-primary" href="/sales/record">Record a sale <span aria-hidden="true">+</span></a>
+</section>
+
+<section class="surface-panel">
+    @if (Model.Sales.Count == 0)
+    {
+        <div class="empty-state empty-large"><span class="empty-mark">$</span><h2>No sales recorded</h2><p>Transactions will appear here after the first sale.</p><a class="button button-primary" href="/sales/record">Record a sale</a></div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Date</th><th>Product</th><th>SKU</th><th>Quantity</th><th>Unit price</th><th>Total</th></tr></thead>
+                <tbody>
+                @foreach (var sale in Model.Sales)
+                {
+                    <tr>
+                        <td>@sale.SaleDate.ToString("MMM d, yyyy")<span class="table-secondary">@sale.SaleDate.ToString("h:mm tt")</span></td>
+                        <td class="table-primary">@sale.ProductName</td>
+                        <td class="mono">@sale.Sku</td>
+                        <td>@sale.QuantitySold</td>
+                        <td class="money">@sale.UnitPriceAtSale.ToString("C", CultureInfo.GetCultureInfo("en-US"))</td>
+                        <td class="money money-strong">@sale.TotalAmount.ToString("C", CultureInfo.GetCultureInfo("en-US"))</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

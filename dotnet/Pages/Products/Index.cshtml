@@ -1,0 +1,69 @@
+@page "/products"
+@model Stockroom.Pages.Products.IndexModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Catalog <span>/</span> @Model.Products.Count items</p>
+        <h1>Products</h1>
+        <p class="page-intro">Keep names, stock levels, and prices current.</p>
+    </div>
+    <a class="button button-primary" href="/products/add">Add product <span aria-hidden="true">+</span></a>
+</section>
+
+<section class="surface-panel">
+    <div class="list-toolbar">
+        <form method="get" class="search-form" role="search">
+            <label class="visually-hidden" for="product-search">Search products</label>
+            <input id="product-search" type="search" name="Search" value="@Model.Search" placeholder="Search name, SKU, category">
+            <button class="button button-secondary" type="submit">Search</button>
+            @if (string.IsNullOrWhiteSpace(Model.Search) == false)
+            {
+                <a class="text-link" href="/products">Clear</a>
+            }
+        </form>
+        <span class="toolbar-count">@Model.Products.Count result@(Model.Products.Count == 1 ? "" : "s")</span>
+    </div>
+
+    @if (Model.Products.Count == 0)
+    {
+        <div class="empty-state empty-large">
+            <span class="empty-mark">＋</span>
+            <h2>@(string.IsNullOrWhiteSpace(Model.Search) ? "No products yet" : "No matching products")</h2>
+            <p>@(string.IsNullOrWhiteSpace(Model.Search) ? "Add the first item to start tracking inventory." : "Try another product name, SKU, or category.")</p>
+            @if (string.IsNullOrWhiteSpace(Model.Search))
+            {
+                <a class="button button-primary" href="/products/add">Add a product</a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Product</th><th>SKU</th><th>Category</th><th>In stock</th><th>Unit price</th><th>Supplier</th><th><span class="visually-hidden">Actions</span></th></tr></thead>
+                <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td><a class="table-primary" href="/products/edit/@product.Id">@product.Name</a><span class="table-secondary">Reorder at @product.ReorderLevel</span></td>
+                        <td class="mono">@product.Sku</td>
+                        <td>@product.Category</td>
+                        <td><span class="stock-count @(product.QuantityInStock <= product.ReorderLevel ? "stock-low" : "stock-good")">@product.QuantityInStock</span></td>
+                        <td class="money">@product.UnitPrice.ToString("C", CultureInfo.GetCultureInfo("en-US"))</td>
+                        <td>@(string.IsNullOrWhiteSpace(product.Supplier) ? "—" : product.Supplier)</td>
+                        <td class="row-actions">
+                            <a class="icon-link" href="/products/edit/@product.Id" aria-label="Edit @product.Name" title="Edit product">Edit</a>
+                            <form method="post" asp-page-handler="Delete" asp-route-id="@product.Id" onsubmit="return confirm('Delete this product?')">
+                                <button class="icon-link danger-link" type="submit" aria-label="Delete @product.Name" title="Delete product">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
